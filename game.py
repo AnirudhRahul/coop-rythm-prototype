@@ -7,7 +7,7 @@ pygame.init()
 
 # Constants
 WIDTH, HEIGHT = 600, 700
-NUM_LANES = 3
+NUM_LANES = 5
 LANE_WIDTH = WIDTH // NUM_LANES
 FPS = 60
 
@@ -15,6 +15,7 @@ FPS = 60
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
 # Note constants
 NOTE_WIDTH = 50
@@ -22,7 +23,7 @@ NOTE_HEIGHT = 20
 NOTE_SPEED = 8
 
 # Pointer Location
-pointer = 1
+pointer = [1,1]
 
 # Initialize the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -56,10 +57,14 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_a:
-                pointer = max(pointer - 1, 0)
+                pointer[0] = max(pointer[0] - 1, 0)
+            if event.key == pygame.K_s:
+                pointer[0] = min(pointer[0] + 1, NUM_LANES-1)
 
+            if event.key == pygame.K_k:
+                pointer[1] = max(pointer[1] - 1, 0)
             if event.key == pygame.K_l:
-                pointer = min(pointer + 1, NUM_LANES-1)
+                pointer[1] = min(pointer[1] + 1, NUM_LANES-1)
 
     # Generate notes at random intervals
     if counter == 0:
@@ -78,8 +83,8 @@ while running:
         pygame.draw.line(screen, (0, 0, 0), (x, 0), (x, HEIGHT))
 
     # Draw the pointer
-    pygame.draw.rect(screen, GREEN, (pointer * LANE_WIDTH, HEIGHT - 10, LANE_WIDTH, 10))
-    
+    pygame.draw.rect(screen, GREEN, (pointer[0] * LANE_WIDTH, HEIGHT - 10, LANE_WIDTH, 10))
+    pygame.draw.rect(screen, BLUE, (pointer[1]* LANE_WIDTH, HEIGHT - 20, LANE_WIDTH, 10))
     # Move and draw notes
     for note in notes:
         note[1] += int(NOTE_SPEED)
@@ -94,9 +99,9 @@ while running:
             notes_left.append(note)
             continue
         lane = note[0] // LANE_WIDTH
-        hearts -= not pointer == lane
-        consec_notes = consec_notes + 1 if pointer == lane else 0
-        combo = combo + 1 if pointer == lane else 0
+        hearts -= not (pointer[0] == lane or pointer[1] == lane)
+        consec_notes = consec_notes + 1 if pointer[0] == lane or pointer[1] == lane else 0
+        combo = combo + 1 if pointer[0] == lane or pointer[1] == lane else 0
         score += combo
 
         # if note[0] < LANE_WIDTH:
