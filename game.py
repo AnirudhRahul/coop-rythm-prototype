@@ -24,7 +24,7 @@ NOTE_SPEED = 8
 
 # Pointer Location
 pointer = [1,1]
-
+length_factor = [1, 1]
 # Initialize the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Rhythm Game")
@@ -83,8 +83,11 @@ while running:
         pygame.draw.line(screen, (0, 0, 0), (x, 0), (x, HEIGHT))
 
     # Draw the pointer
-    pygame.draw.rect(screen, GREEN, (pointer[0] * LANE_WIDTH, HEIGHT - 10, LANE_WIDTH, 10))
-    pygame.draw.rect(screen, BLUE, (pointer[1]* LANE_WIDTH, HEIGHT - 20, LANE_WIDTH, 10))
+    if length_factor[0] > 0:
+        pygame.draw.rect(screen, GREEN, (pointer[0] * LANE_WIDTH, HEIGHT - 10, LANE_WIDTH * length_factor[0] , 10))
+    if length_factor[1] > 0:
+        pygame.draw.rect(screen, BLUE, (pointer[1]* LANE_WIDTH, HEIGHT - 20, LANE_WIDTH * length_factor[1], 10))
+
     # Move and draw notes
     for note in notes:
         note[1] += int(NOTE_SPEED)
@@ -102,6 +105,20 @@ while running:
         hearts -= not (pointer[0] == lane or pointer[1] == lane)
         consec_notes = consec_notes + 1 if pointer[0] == lane or pointer[1] == lane else 0
         combo = combo + 1 if pointer[0] == lane or pointer[1] == lane else 0
+
+     
+
+        if pointer[0] == lane:
+            length_factor[0] = min(length_factor[0] + 0.2, 1)
+            length_factor[1] = length_factor[1] - 0.1 
+        elif pointer[1] == lane: 
+            length_factor[1] = min(length_factor[1] + 0.2, 1)
+            length_factor[0] = length_factor[0] - 0.1 
+        
+        for i in range (len(length_factor)):
+            if length_factor[i] <= 0:
+                pointer[i] = NUM_LANES + 10
+        
         score += combo
 
         # if note[0] < LANE_WIDTH:
