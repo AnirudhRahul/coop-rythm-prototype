@@ -13,8 +13,9 @@ FPS = 60
 
 # Colors
 WHITE = (255, 255, 255)
-RED = (255, 0, 0)
+RED = (200, 0, 0)
 GREEN = (0, 255, 0)
+BLUE = (0, 0, 200)  # New color for special notes
 
 # Note constants
 NOTE_WIDTH = 50
@@ -38,16 +39,20 @@ notes = []
 def generate_note():
     lane = random.randint(0, NUM_LANES-1)
     x = lane * LANE_WIDTH + (LANE_WIDTH - NOTE_WIDTH) // 2
-    notes.append([x, 0])
+    is_special = random.choice([True, False, False, False, False, False])  # 50% chance of being a special note
+    color = BLUE if is_special else RED
+    notes.append([x, 0, is_special, color])
 
 # Main game loop
 running = True
 score = 0
-hearts = 3
+hearts = 5
 counter = 0
 consec_notes = 0
 combo = 0
 freq = 40
+
+direction = 1
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -56,10 +61,10 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_a:
-                pointer = max(pointer - 1, 0)
+                pointer = max(pointer - 1 * direction, 0)
 
             if event.key == pygame.K_l:
-                pointer = min(pointer + 1, 4)
+                pointer = min(pointer + 1 * direction, 4)
 
     # Generate notes at random intervals
     if counter == 0:
@@ -83,7 +88,7 @@ while running:
     # Move and draw notes
     for note in notes:
         note[1] += int(NOTE_SPEED)
-        pygame.draw.rect(screen, RED, (note[0], note[1], NOTE_WIDTH, NOTE_HEIGHT))
+        pygame.draw.rect(screen, note[3], (note[0], note[1], NOTE_WIDTH, NOTE_HEIGHT))
 
     # Check for user input to catch notes
     keys = pygame.key.get_pressed()
@@ -98,6 +103,8 @@ while running:
         consec_notes = consec_notes + 1 if pointer == lane else 0
         score += consec_notes
         combo = combo + 1 if pointer == lane else 0
+        if pointer == lane and note[2] :
+            direction*=-1
         # if note[0] < LANE_WIDTH:
         #     hearts -= not pointer == 0
         #     consec_notes = consec_notes + 1 if pointer == 0 else 0
