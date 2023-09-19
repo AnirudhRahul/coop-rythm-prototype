@@ -64,7 +64,7 @@ while running:
                 pointer = max(pointer - 1 * direction, 0)
 
             if event.key == pygame.K_l:
-                pointer = min(pointer + 1 * direction, 4)
+                pointer = min(pointer + 1 * direction, NUM_LANES-1)
 
     # Generate notes at random intervals
     if counter == 0:
