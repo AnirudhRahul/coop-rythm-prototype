@@ -7,7 +7,7 @@ pygame.init()
 
 # Constants
 WIDTH, HEIGHT = 600, 700
-NUM_LANES = 5
+NUM_LANES = 3
 LANE_WIDTH = WIDTH // NUM_LANES
 FPS = 60
 
