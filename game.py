@@ -96,8 +96,8 @@ while running:
         lane = note[0] // LANE_WIDTH
         hearts -= not pointer == lane
         consec_notes = consec_notes + 1 if pointer == lane else 0
-        score += consec_notes
         combo = combo + 1 if pointer == lane else 0
+        score += combo
         # if note[0] < LANE_WIDTH:
         #     hearts -= not pointer == 0
         #     consec_notes = consec_notes + 1 if pointer == 0 else 0
