@@ -37,9 +37,18 @@ notes = []
 
 # Function to generate a random note in one of the lanes
 def generate_note():
-    lane = random.randint(0, NUM_LANES-1)
-    x = lane * LANE_WIDTH + (LANE_WIDTH - NOTE_WIDTH) // 2
-    notes.append([x, 0])
+    if random.random() > 0.7 :
+        lane1 = random.randint(0, NUM_LANES-1)
+        lane2 = random.randint(0, NUM_LANES-1)
+        x1 = lane1 * LANE_WIDTH + (LANE_WIDTH - NOTE_WIDTH) // 2
+        x2 = lane2 * LANE_WIDTH + (LANE_WIDTH - NOTE_WIDTH) // 2
+        notes.append([x1, 0])
+        notes.append([x2, 0])
+    else:
+        lane1 = random.randint(0, NUM_LANES-1)
+        x1 = lane1 * LANE_WIDTH + (LANE_WIDTH - NOTE_WIDTH) // 2
+        notes.append([x1, 0])
+
 
 # Main game loop
 running = True
@@ -104,27 +113,6 @@ while running:
         combo = combo + 1 if pointer[0] == lane or pointer[1] == lane else 0
         score += combo
 
-        # if note[0] < LANE_WIDTH:
-        #     hearts -= not pointer == 0
-        #     consec_notes = consec_notes + 1 if pointer == 0 else 0
-        #     combo = combo + 1 if pointer == 0 else 0
-        # elif LANE_WIDTH <= note[0] < 2 * LANE_WIDTH:
-        #     hearts -= not pointer == 1
-        #     consec_notes = consec_notes + 1 if pointer == 1 else 0
-        #     combo = combo + 1 if pointer == 1 else 0
-        # elif 2 * LANE_WIDTH <= note[0] < 3 * LANE_WIDTH:
-        #     hearts -= not pointer == 2
-        #     consec_notes = consec_notes + 1 if pointer == 2 else 0
-        #     combo = combo + 1 if pointer == 2 else 0
-        # elif 3 * LANE_WIDTH <= note[0] < 4 * LANE_WIDTH:
-        #     hearts -= not pointer == 3
-        #     consec_notes = consec_notes + 1 if pointer == 3 else 0
-        #     combo = combo + 1 if pointer == 3 else 0
-        # elif 4 * LANE_WIDTH <= note[0]:
-        #     hearts -= not pointer == 4
-        #     consec_notes = consec_notes + 1 if pointer == 4 else 0
-        #     combo = combo + 1 if pointer == 4 else 0
-        
     notes = notes_left
 
     # Display the hearts
